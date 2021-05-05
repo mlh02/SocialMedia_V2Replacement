@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TeeSpringV1.Auth;
+using TeeSpringV1.Models;
 
 namespace TeeSpringV1
 {
@@ -23,7 +27,20 @@ namespace TeeSpringV1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("CookieAuthentication")
+                   .AddCookie("CookieAuthentication", config =>
+                   {
+                       config.Cookie.Name = "UserLoginCookie"; // Name of cookie   
+                     config.LoginPath = "/User/Login"; // Path for the redirect to user login page  
+                     config.AccessDeniedPath = "/User/AccessDenied";
+                   });
+
+            services.AddScoped<IAuthorizationHandler, RolesAuthorizationHandler>();
+
+
             services.AddControllersWithViews();
+            services.AddDbContext<DataBaseContext>(item => item.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +60,11 @@ namespace TeeSpringV1
             app.UseStaticFiles();
 
             app.UseRouting();
-
             app.UseAuthorization();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
