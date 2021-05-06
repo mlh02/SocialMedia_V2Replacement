@@ -12,6 +12,7 @@ namespace TeeSpringV1.Models
         }
         public ISet<User> Users { get; set; }
         public DbSet<TeeSpringV1.Models.User> User { get; set; }
+        public DbSet<TeeSpringV1.Models.Product> Product { get; set; }
     }
 
 }
