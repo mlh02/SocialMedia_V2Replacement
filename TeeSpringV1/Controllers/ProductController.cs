@@ -47,7 +47,7 @@ namespace TeeSpringV1.Controllers
         // GET: Product/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace TeeSpringV1.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", product.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", product.UserId);
             return View(product);
         }
 
@@ -81,7 +81,7 @@ namespace TeeSpringV1.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", product.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", product.UserId);
             return View(product);
         }
 
@@ -117,7 +117,7 @@ namespace TeeSpringV1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", product.UserId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Id", product.UserId);
             return View(product);
         }
 
